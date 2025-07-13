@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      zookeeper:
+        image: bitnami/zookeeper:latest
+        ports:
+          - 2181:2181
+
       kafka:
         image: bitnami/kafka:latest
         ports:
@@ -18,10 +23,6 @@ jobs:
           KAFKA_LISTENERS: PLAINTEXT://:9092
           KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      zookeeper:
-        image: bitnami/zookeeper:latest
-        ports:
-          - 2181:2181
 
     steps:
     - name: Checkout Code
@@ -30,7 +31,13 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.20
+        go-version: '1.20'
+
+    - name: Debug Go Env
+      run: |
+        which go
+        go version
+        go help mod
 
     - name: Build Payment Service
       working-directory: ./payment-service
@@ -45,4 +52,4 @@ jobs:
         go build -o main .
 
     - name: Run Unit Tests (Optional)
-      run: echo "Add your Go unit test steps here"
+      run: echo "Add tests if needed"
