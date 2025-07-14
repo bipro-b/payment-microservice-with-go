@@ -1,6 +1,7 @@
 module github.com/bipro/payment-service
 
-go 1.23.4
+//notification-service
+go 1.23
 
 require (
 	github.com/gin-gonic/gin v1.10.1
